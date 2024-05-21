@@ -15,10 +15,13 @@ const App = () => {
   }, []);
 
   const searchMovies = async (title) => {
-    const response = await fetch(`${API_URL}&s=${title}`);
-    const data = await response.json();
-
-    setMovies(data.Search);
+    fetch(`${API_URL}&s=${title}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMovies(data.Search);
+      });
   };
 
   return (
@@ -34,8 +37,7 @@ const App = () => {
         <img
           src={SearchIcon}
           alt="search"
-          
-          onClick={() =>  searchMovies(searchTerm)}
+          onClick={() => searchMovies(searchTerm)}
         />
       </div>
 
