@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import MovieCard from "./MovieCard";
 import SearchIcon from "./search.svg";
 import "./App.css";
+import axios from "axios";
 
 const API_URL = "http://www.omdbapi.com?apikey=b6003d8a";
 
@@ -15,13 +16,13 @@ const App = () => {
   }, []);
 
   const searchMovies = async (title) => {
-    fetch(`${API_URL}&s=${title}`, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setMovies(data.Search);
-      });
+    const resp = await axios.get(`${API_URL}&s=${title}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await resp.data.Search;
+    setMovies(data);
   };
 
   return (
@@ -56,4 +57,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default App;
