@@ -5,7 +5,7 @@ import SearchIcon from "./search.svg";
 import "./App.css";
 import axios from "axios";
 
-const API_URL = "http://www.omdbapi.com?apikey=b6003d8a";
+const API_URL = "https://www.omdbapi.com?apikey=b6003d8a"; // Changed to HTTPS
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,13 +16,17 @@ const App = () => {
   }, []);
 
   const searchMovies = async (title) => {
-    const resp = await axios.get(`${API_URL}&s=${title}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await resp.data.Search;
-    setMovies(data);
+    try {
+      const resp = await axios.get(`${API_URL}&s=${title}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = resp.data.Search;
+      setMovies(data);
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    }
   };
 
   return (
@@ -45,7 +49,7 @@ const App = () => {
       {movies?.length > 0 ? (
         <div className="container">
           {movies.map((movie) => (
-            <MovieCard movie={movie} />
+            <MovieCard key={movie.imdbID} movie={movie} />
           ))}
         </div>
       ) : (
@@ -57,4 +61,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default App;
